@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <>
       <div>
-        <Button variant="default">
+        <Button variant="outline">
           Button
         </Button>
       </div>
