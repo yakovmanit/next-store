@@ -1,5 +1,5 @@
 import React from 'react';
-import {Title, FilterCheckbox, RangeSlider} from "./index";
+import {Title, FilterCheckbox, RangeSlider, CheckboxFiltersGroup} from "./index";
 import { Input } from '../ui';
 
 interface Props {
@@ -11,6 +11,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
     <div className={className}>
       <Title text="Filters" size="sm" className="mb-5 font-bold" />
 
+      {/* Top checkboxes */}
       <div className="flex flex-col gap-2">
         <FilterCheckbox text="Top" value="1" />
         <FilterCheckbox text="New" value="1" />
@@ -42,6 +43,34 @@ export const Filters: React.FC<Props> = ({ className }) => {
           value={[0, 1000]}
         />
       </div>
+
+      {/* Bottom checkboxes */}
+      <CheckboxFiltersGroup
+        title={"Includes"}
+        className="mt-5"
+        limit={6}
+        defaultItems={[
+          { text: 'text 1', value: '1' },
+          { text: 'text 2', value: '2' },
+          { text: 'text 3', value: '3' },
+          { text: 'text 4', value: '4' },
+          { text: 'text 5', value: '5' },
+          { text: 'text 6', value: '6' },
+          { text: 'text 7', value: '7' },
+          { text: 'text 8', value: '8' },
+        ]}
+        items={[
+          { text: 'text 1', value: '1' },
+          { text: 'text 2', value: '2' },
+          { text: 'text 3', value: '3' },
+          { text: 'text 4', value: '4' },
+          { text: 'text 5', value: '5' },
+          { text: 'text 6', value: '6' },
+          { text: 'text 7', value: '7' },
+          { text: 'text 8', value: '8' },
+        ]}
+      />
+
     </div>
   );
 };
