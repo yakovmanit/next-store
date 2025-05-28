@@ -8,18 +8,86 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  fullName  String
-  email     String
-  password  String
+  id       Int    @id @default(autoincrement())
+  fullName String
+  email    String @unique
+  password String
+
+  // one user to one cart
+  cart Cart?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Product {
-  id        Int      @id @default(autoincrement())
-  name      String
-  imageUrl  String
+  id       Int    @id @default(autoincrement())
+  name     String
+  imageUrl String
+
+  // one Product to one Category
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  // several Products to several Ingredients
+  ingredients Ingredients[]
+
+  // several ProductItem (variants) to one product
+  items ProductItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductItem {
+  id          Int  @id @default(autoincrement())
+  price       Int
+  size        Int?
+  productType Int?
+
+  // one product to several ProductItems
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  // one Category to several Products
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Ingredients {
+  id       Int    @id @default(autoincrement())
+  name     String
+  price    Int
+  imageUrl String
+
+  // several Ingredients to several Products
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Cart {
+  id Int @id @default(autoincrement())
+
+  // one cart to one user
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @unique
+
+  totalAmount Int @default(0)
+
+  token String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
