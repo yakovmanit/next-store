@@ -8,13 +8,20 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  fullName String
-  email    String @unique
-  password String
+  id         Int      @id @default(autoincrement())
+  fullName   String
+  email      String   @unique
+  password   String
+  role       UserRole @default(USER)
+  provider   String?
+  providerId String?
 
   // one user to one cart
   cart Cart?
+
+  orders Order[]
+
+  verificationCode VerificationCode?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -49,6 +56,8 @@ model ProductItem {
   product   Product @relation(fields: [productId], references: [id])
   productId Int
 
+  cartItem CartItem[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -73,6 +82,8 @@ model Ingredients {
   // several Ingredients to several Products
   products Product[]
 
+  cartItems CartItem[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -84,10 +95,68 @@ model Cart {
   user   User? @relation(fields: [userId], references: [id])
   userId Int?  @unique
 
+  cartItem CartItem[]
+
   totalAmount Int @default(0)
 
   token String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model CartItem {
+  id       Int @id @default(autoincrement())
+  quantity Int
+
+  productItem   ProductItem @relation(fields: [productItemId], references: [id])
+  productItemId Int
+
+  cart   Cart @relation(fields: [cartId], references: [id])
+  cartId Int
+
+  ingredients Ingredients[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  token       String
+  totalAmount Int
+  status      OrderStatus
+  paymentId   String?
+  items       Json
+  address     String
+  email       String
+  phone       String
+  comment     String?
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationCode {
+  id   Int    @id @default(autoincrement())
+  code String
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+
+  createdAt DateTime @default(now())
+}
+
+enum OrderStatus {
+  PENDING
+  SUCCEEDED
+  CANCELLED
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
