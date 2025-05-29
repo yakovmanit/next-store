@@ -37,7 +37,7 @@ model Product {
   categoryId Int
 
   // several Products to several Ingredients
-  ingredients Ingredients[]
+  ingredients Ingredient[]
 
   // several ProductItem (variants) to one product
   items ProductItem[]
@@ -56,7 +56,7 @@ model ProductItem {
   product   Product @relation(fields: [productId], references: [id])
   productId Int
 
-  cartItem CartItem[]
+  cartItems CartItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -73,7 +73,7 @@ model Category {
   updatedAt DateTime @updatedAt
 }
 
-model Ingredients {
+model Ingredient {
   id       Int    @id @default(autoincrement())
   name     String
   price    Int
@@ -99,7 +99,7 @@ model Cart {
 
   totalAmount Int @default(0)
 
-  token String?
+  token String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -115,7 +115,7 @@ model CartItem {
   cart   Cart @relation(fields: [cartId], references: [id])
   cartId Int
 
-  ingredients Ingredients[]
+  ingredients Ingredient[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -128,6 +128,7 @@ model Order {
   status      OrderStatus
   paymentId   String?
   items       Json
+  fullName    String
   address     String
   email       String
   phone       String
@@ -142,12 +143,14 @@ model Order {
 
 model VerificationCode {
   id   Int    @id @default(autoincrement())
-  code String
+  code String @unique
 
   user   User @relation(fields: [userId], references: [id])
   userId Int  @unique
 
   createdAt DateTime @default(now())
+
+  @@unique([userId, code])
 }
 
 enum OrderStatus {
