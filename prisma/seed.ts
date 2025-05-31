@@ -21,7 +21,7 @@ async function up() {
 
   const product1 = await prisma.product.create({
     data: {
-      id: 10,
+      id: 4,
       name: 'Drip Set 1',
       imageUrl : 'https://foundation-images.fra1.cdn.digitaloceanspaces.com/ua/uploads/goods/uji6v8VAk2FKS4YMOWPOxoo598J4qXjym4Wf15ic.png',
       categoryId: 4,
@@ -33,7 +33,7 @@ async function up() {
 
   const product2 = await prisma.product.create({
     data: {
-      id: 11,
+      id: 5,
       name: 'Drip Set 2',
       imageUrl : 'https://content2.rozetka.com.ua/goods/images/big_tile/522736254.png',
       categoryId: 4,
@@ -45,7 +45,7 @@ async function up() {
 
   const product3 = await prisma.product.create({
     data: {
-      id: 12,
+      id: 6,
       name: 'Drip Set 3',
       imageUrl : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCDu2NHUF8gNbcZuXqf3KP_TY3-yRdp8X17A&s',
       categoryId: 4,
@@ -159,13 +159,13 @@ async function up() {
 
 // Delete all data from DB
 async function down() {
+  await prisma.cartItem.deleteMany({});
+  await prisma.cart.deleteMany({});
   await prisma.productItem.deleteMany({});
   await prisma.product.deleteMany({});
   await prisma.ingredient.deleteMany({});
   await prisma.category.deleteMany({});
   await prisma.user.deleteMany({});
-  await prisma.cart.deleteMany({});
-  await prisma.cartItem.deleteMany({});
 }
 
 async function main() {
