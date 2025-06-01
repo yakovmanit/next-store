@@ -21,17 +21,22 @@ interface Props {
   defaultValue?: string[];
   selected?: Set<string>;
   className?: string;
+  selectedIds?: Set<string>;
   name?: string;
 }
 
-export const CheckboxFiltersGroup: React.FC<Props> = ({
-  title,
-  items,
-  defaultItems,
-  limit = 5,
-  searchInputPlaceholder = 'Search...',
-  loading,
-  className,
+export const CheckboxFiltersGroup: React.FC<Props> = (
+  {
+    title,
+    items,
+    defaultItems,
+    limit = 5,
+    searchInputPlaceholder = 'Search...',
+    loading,
+    className,
+    onClickCheckbox,
+    selectedIds,
+    name,
 }) => {
   const [showAll, setShowAll] = useState(false);
   const [searchValue, setSearchValue] = React.useState('');
@@ -80,9 +85,10 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
             key={index}
             text={item.text}
             value={item.value}
-            endAdornment={item.endAdornment}
-            checked={false}
-            onCheckedChange={(ids) => console.log(ids)}
+            endAdornment={item?.endAdornment}
+            checked={selectedIds?.has(item.value) || false}
+            onCheckedChange={() => onClickCheckbox?.(item.value)}
+            name={name}
           />
         ))}
       </div>
