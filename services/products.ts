@@ -3,7 +3,7 @@ import {Product} from "@prisma/client";
 import {ApiRoutes} from "@/services/constants";
 
 export const search = async (query: string): Promise<Product[]> => {
-  // const { data } = await axiosInstance.get<Product>('/products/search', { params: { query } });
+  // const { data } = await axiosInstance.get<Product[]>('/products/search', { params: { query } });
   //
   // return data;
 
