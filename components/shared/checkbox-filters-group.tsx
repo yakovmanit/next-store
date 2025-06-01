@@ -6,7 +6,7 @@ import {
   FilterCheckboxProps
 } from './filter-checkbox';
 import { Input } from '../ui/input';
-// import { Skeleton } from '../ui';
+import { Skeleton } from '../ui';
 
 type Item = FilterCheckboxProps;
 
@@ -30,6 +30,7 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
   defaultItems,
   limit = 5,
   searchInputPlaceholder = 'Search...',
+  loading,
   className,
 }) => {
   const [showAll, setShowAll] = useState(false);
@@ -40,6 +41,20 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
   const onChangeSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
+
+  if (loading) {
+    return (
+      <div className={className}>
+        <p className="font-bold mb-3">{title}</p>
+
+        {
+          [...new Array(limit)].map((_, i) => (
+            <Skeleton key={i} className="h-6 mb-4"></Skeleton>
+          ))
+        }
+      </div>
+    );
+  }
 
   return (
     <div className={className}>
