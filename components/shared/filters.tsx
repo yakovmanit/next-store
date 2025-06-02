@@ -5,22 +5,22 @@ import {Title, RangeSlider, CheckboxFiltersGroup} from "./index";
 import { Input } from '../ui';
 import {useFilterIngredients} from "@/hooks/useFilterIngredients";
 import {useSet} from "react-use";
+import qs from 'qs';
+import {useRouter} from "next/navigation";
 
 interface Props {
   className?: string;
 }
 
 interface PriceProps {
-  priceFrom: number;
-  priceTo: number;
+  priceFrom?: number;
+  priceTo?: number;
 }
 
 export const Filters: React.FC<Props> = ({ className }) => {
+  const router = useRouter();
   const { ingredients, loading, onAddId, selectedIngredients } = useFilterIngredients();
-  const [prices, setPrice] = useState<PriceProps>({
-    priceFrom: 0,
-    priceTo: 2000
-  });
+  const [prices, setPrice] = useState<PriceProps>({});
 
   const [sizes, { toggle: toggleSizes } ] = useSet(new Set<string>([]));
   const [productTypes, { toggle: toggleProductTypes } ] = useSet(new Set<string>([]));
@@ -35,7 +35,19 @@ export const Filters: React.FC<Props> = ({ className }) => {
   const items = ingredients.map(item => ({ text: item.name, value: String(item.id) }));
 
   useEffect(() => {
-    console.log('prises: ', prices, 'productTypes: ', productTypes, 'sizes: ', sizes, 'selectedIngredients: ', selectedIngredients );
+    const filters = {
+      ...prices,
+      productTypes: Array.from(productTypes),
+      sizes: Array.from(sizes),
+      selectedIngredients: Array.from(selectedIngredients),
+    }
+
+    const query = qs.stringify(filters, {
+      arrayFormat: 'comma',
+    });
+
+    router.push(`?${query}`, { scroll: false });
+
   }, [prices, productTypes, sizes, selectedIngredients]);
 
   return (
@@ -84,7 +96,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
             type="number"
             min={100}
             max={2000}
-            placeholder="1000"
+            placeholder="2000"
             value={String(prices.priceTo)}
             onChange={e => updatePrice('priceTo', Number(e.target.value))}
           />
@@ -95,8 +107,8 @@ export const Filters: React.FC<Props> = ({ className }) => {
           max={2000}
           step={10}
           value={[
-            prices.priceFrom,
-            prices.priceTo,
+            prices.priceFrom || 0,
+            prices.priceTo || 2000,
           ]}
           onValueChange={([priceFrom, priceTo]) => setPrice({ priceFrom, priceTo })}
         />
