@@ -6,7 +6,7 @@ import { Input } from '../ui';
 import {useFilterIngredients} from "@/hooks/useFilterIngredients";
 import {useSet} from "react-use";
 import qs from 'qs';
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 
 interface Props {
   className?: string;
@@ -17,13 +17,29 @@ interface PriceProps {
   priceTo?: number;
 }
 
-export const Filters: React.FC<Props> = ({ className }) => {
-  const router = useRouter();
-  const { ingredients, loading, onAddId, selectedIngredients } = useFilterIngredients();
-  const [prices, setPrice] = useState<PriceProps>({});
+interface QueryFilters extends PriceProps{
+  productTypes: string;
+  sizes: string;
+  ingredients: string;
+}
 
-  const [sizes, { toggle: toggleSizes } ] = useSet(new Set<string>([]));
-  const [productTypes, { toggle: toggleProductTypes } ] = useSet(new Set<string>([]));
+export const Filters: React.FC<Props> = ({ className }) => {
+  const searchParams = useSearchParams() as unknown as Map<keyof QueryFilters, string>;
+  const router = useRouter();
+  const { ingredients, loading, onAddId, selectedIngredients } = useFilterIngredients(
+    searchParams.get('ingredients')?.split(',')
+  );
+  const [prices, setPrice] = useState<PriceProps>({
+    priceFrom: Number(searchParams.get('priceFrom')) || undefined,
+    priceTo: Number(searchParams.get('priceTo')) || undefined,
+  });
+
+  const [sizes, { toggle: toggleSizes } ] = useSet(new Set<string>(
+    searchParams.has('sizes') ? searchParams.get('sizes')?.split(',') : []
+  ));
+  const [productTypes, { toggle: toggleProductTypes } ] = useSet(new Set<string>(
+    searchParams.has('productTypes') ? searchParams.get('productTypes')?.split(',') : []
+  ));
 
   const updatePrice = (name: keyof PriceProps, value: number) => {
     setPrice({
@@ -39,7 +55,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
       ...prices,
       productTypes: Array.from(productTypes),
       sizes: Array.from(sizes),
-      selectedIngredients: Array.from(selectedIngredients),
+      ingredients: Array.from(selectedIngredients),
     }
 
     const query = qs.stringify(filters, {

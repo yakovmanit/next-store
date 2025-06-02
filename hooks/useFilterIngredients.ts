@@ -10,11 +10,11 @@ interface ReturnProps {
   onAddId: (id: string) => void;
 }
 
-export const useFilterIngredients = (): ReturnProps => {
+export const useFilterIngredients = (values: string[] = []): ReturnProps => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [selectedIngredients, { toggle } ] = useSet(new Set<string>([]));
+  const [selectedIds, { toggle } ] = useSet(new Set<string>(values));
 
   useEffect(() => {
     async function fetchIngredients() {
@@ -35,5 +35,5 @@ export const useFilterIngredients = (): ReturnProps => {
     fetchIngredients();
   }, []);
 
-  return { ingredients, loading, onAddId: toggle, selectedIngredients };
+  return { ingredients, loading, onAddId: toggle, selectedIngredients: selectedIds };
 }
