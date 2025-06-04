@@ -3,7 +3,7 @@ import {prisma} from "@/prisma/prisma-client";
 import {notFound} from "next/navigation";
 import {Container, Title} from "@/components/shared";
 import {ProductImage} from "@/components/shared/product-image";
-import {GroupVariants} from "@/components/shared/grout-valiants";
+import {GroupVariants} from "@/components/shared/group-variants";
 
 export default async function ProductPage({ params: { id } }: { params: { id: string } }) {
   const product = await prisma.product.findFirst({
