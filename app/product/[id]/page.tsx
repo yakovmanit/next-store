@@ -1,9 +1,32 @@
 import React from 'react';
+import {prisma} from "@/prisma/prisma-client";
+import {notFound} from "next/navigation";
+import {Container, Title} from "@/components/shared";
+import {ProductImage} from "@/components/shared/product-image";
 
-export default function ProductPage({ params: { id } }: { params: { id: string } }) {
+export default async function ProductPage({ params: { id } }: { params: { id: string } }) {
+  const product = await prisma.product.findFirst({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  if (!product) {
+    return notFound();
+  }
+
   return (
     <div>
-      {id}
+      <Container  className="flex my-10">
+        <div className="flex flex-1">
+          <ProductImage imageUrl={product.imageUrl} className="w-full max-w-[20vw] mx-auto" />
+        </div>
+        <div className="flex flex-1 flex-col p-7">
+          <Title text={product.name} size="md" className="font-extrabold mb-1" />
+
+          <p className="text-gray-400">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias distinctio doloribus eligendi libero natus officia possimus quibusdam sed suscipit ullam. Aut est explicabo impedit iure, molestiae quibusdam reiciendis reprehenderit saepe!</p>
+        </div>
+      </Container>
     </div>
   );
 };
