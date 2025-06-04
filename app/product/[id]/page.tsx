@@ -3,6 +3,7 @@ import {prisma} from "@/prisma/prisma-client";
 import {notFound} from "next/navigation";
 import {Container, Title} from "@/components/shared";
 import {ProductImage} from "@/components/shared/product-image";
+import {GroupVariants} from "@/components/shared/grout-valiants";
 
 export default async function ProductPage({ params: { id } }: { params: { id: string } }) {
   const product = await prisma.product.findFirst({
@@ -22,9 +23,27 @@ export default async function ProductPage({ params: { id } }: { params: { id: st
           <ProductImage imageUrl={product.imageUrl} className="w-full max-w-[20vw] mx-auto" />
         </div>
         <div className="flex flex-1 flex-col p-7">
-          <Title text={product.name} size="md" className="font-extrabold mb-1" />
+          <Title text={product.name} size="md" className="font-extrabold mb-3" />
 
-          <p className="text-gray-400">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias distinctio doloribus eligendi libero natus officia possimus quibusdam sed suscipit ullam. Aut est explicabo impedit iure, molestiae quibusdam reiciendis reprehenderit saepe!</p>
+          <p className="text-gray-400 mb-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias distinctio doloribus eligendi libero natus officia possimus quibusdam sed suscipit ullam. Aut est explicabo impedit iure, molestiae quibusdam reiciendis reprehenderit saepe!</p>
+
+          <GroupVariants
+            value="2"
+            items={[
+            {
+              name: "filter",
+              value: "1",
+            },
+            {
+              name: "omni",
+              value: "2",
+            },
+            {
+              name: "espresso",
+              value: "3",
+              disabled: true,
+            },
+          ]} />
         </div>
       </Container>
     </div>
