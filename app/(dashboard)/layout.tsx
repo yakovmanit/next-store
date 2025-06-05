@@ -1,3 +1,4 @@
+import "../globals.css";
 import {Header} from "@/components/shared";
 
 export const metadata = {
