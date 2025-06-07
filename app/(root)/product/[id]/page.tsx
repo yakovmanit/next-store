@@ -30,20 +30,20 @@ export default async function ProductPage({ params: { id } }: { params: { id: st
           <GroupVariants
             value="2"
             items={[
-            {
-              name: "filter",
-              value: "1",
-            },
-            {
-              name: "omni",
-              value: "2",
-            },
-            {
-              name: "espresso",
-              value: "3",
-              disabled: true,
-            },
-          ]} />
+              {
+                name: "filter",
+                value: "1",
+              },
+              {
+                name: "omni",
+                value: "2",
+              },
+              {
+                name: "espresso",
+                value: "3",
+                disabled: true,
+              },
+            ]} />
         </div>
       </Container>
     </div>
