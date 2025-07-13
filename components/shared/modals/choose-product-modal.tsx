@@ -6,6 +6,8 @@ import {DialogContent, DialogTitle} from "@/components/ui/dialog";
 import {Product} from "@prisma/client";
 import {cn} from "@/lib/utils";
 import {useRouter} from "next/navigation";
+import {ChooseProductForm} from "@/components/shared/choose-product-form";
+import {VisuallyHidden} from "@radix-ui/react-visually-hidden";
 
 interface Props {
   product: Product;
@@ -22,9 +24,11 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
           'p-0 w-[1060px] max-w-[1060px] min-h-[500px] bg-white overflow-hidden',
           className,
         )}>
-        <DialogTitle>
-          {product.name}
-        </DialogTitle>
+        <ChooseProductForm imageUrl={product.imageUrl} name={product.name} ingredients={[]} />
+
+        <VisuallyHidden>
+          <DialogTitle />
+        </VisuallyHidden>
       </DialogContent>
     </Dialog>
   );
