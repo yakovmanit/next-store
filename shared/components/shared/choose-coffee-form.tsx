@@ -1,10 +1,11 @@
 "use client"
 
-import React from 'react';
+import React, {useState} from 'react';
 import {cn} from "@/shared/lib/utils";
-import {ProductImage} from "@/shared/components/shared/product-image";
 import {Title} from "@/shared/components/shared/title";
 import { Button } from '../ui';
+import {GroupVariants, ProductImage} from "@/shared/components/shared";
+import {CoffeeSize, coffeeSizes, CoffeeType, coffeeTypes} from "@/shared/constants/coffee";
 
 interface Props {
   imageUrl: string;
@@ -25,6 +26,9 @@ export const ChooseCoffeeForm: React.FC<Props> = (
     className,
   }
 ) => {
+  const [size, setSize] = useState<CoffeeSize>(20);
+  const [type, setType] = useState<CoffeeType>(1);
+
   const textDetails = 'lorem ipsum dolor sit amet consectetur adipisicing elit.';
   const totalPrice = 199;
 
@@ -36,6 +40,18 @@ export const ChooseCoffeeForm: React.FC<Props> = (
         <Title text={name} className='font-extrabold mb-1' />
 
         <p className='text-grey-400'>{textDetails}</p>
+
+        <GroupVariants
+          items={coffeeSizes}
+          value={String(size)}
+          onClick={value => setSize(Number(value) as CoffeeSize)}
+        />
+
+        <GroupVariants
+          items={coffeeTypes}
+          value={String(type)}
+          onClick={value => setType(Number(value) as CoffeeType)}
+        />
 
         <Button
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">

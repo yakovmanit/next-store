@@ -9,6 +9,7 @@ import {ChooseProductForm} from "@/shared/components/shared/choose-product-form"
 import {VisuallyHidden} from "@radix-ui/react-visually-hidden";
 import {ProductWithRelations} from "@/@types/prisma";
 import {ChooseCoffeeForm} from "@/shared/components/shared/choose-coffee-form";
+import {coffeeSizes} from "@/shared/constants/coffee";
 
 interface Props {
   product: ProductWithRelations;
@@ -29,7 +30,7 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 
         {
           isCoffeeForm ? (
-            <ChooseCoffeeForm imageUrl={product.imageUrl} name={product.name} ingredients={[]} />
+            <ChooseCoffeeForm imageUrl={product.imageUrl} name={product.name} ingredients={coffeeSizes} />
           ) : (
             <ChooseProductForm imageUrl={product.imageUrl} name={product.name} />
           )

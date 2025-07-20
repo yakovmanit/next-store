@@ -9,4 +9,8 @@ export { FilterCheckbox } from './filter-checkbox';
 export { RangeSlider } from './range-slider';
 export { CheckboxFiltersGroup } from './checkbox-filters-group';
 export { SearchInput } from './search-input';
+export { ProductImage } from './product-image';
+export { GroupVariants } from './group-variants';
+export { ChooseCoffeeForm } from './choose-coffee-form';
+export { ChooseProductForm } from './choose-product-form';
 export * from './modals';
