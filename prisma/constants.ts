@@ -32,13 +32,13 @@ export const ingredients = [
     id: 1,
     name: 'Drip Ethiopia Chelbesa',
     price: 40,
-    imageUrl : 'https://foundation-images.fra1.cdn.digitaloceanspaces.com/pl/uploads/goods/yGfygOR9vr2Be8y5A9N3xNKskJRqEaj6pOJomxpZ.png',
+    imageUrl : 'https://image.maudau.com.ua/webp/size/lg/products/f9/37/7c/f9377c27-cfe4-4126-9b27-abf8da47f0f9',
   },
   {
     id: 2,
     name: 'Drip monteblanco',
     price: 50,
-    imageUrl : 'https://foundation-images.fra1.cdn.digitaloceanspaces.com/pl/uploads/goods/kaHlxJL1iHroYKcti0hlIt33Q7YqqDL8DG13rMif.png',
+    imageUrl : 'https://image.maudau.com.ua/webp/size/lg/products/f9/37/7c/f9377c27-cfe4-4126-9b27-abf8da47f0f9',
   },
   {
     id: 3,
@@ -50,13 +50,13 @@ export const ingredients = [
     id: 4,
     name: 'Drip Ethiopia Chelbesa 2',
     price: 40,
-    imageUrl : 'https://foundation-images.fra1.cdn.digitaloceanspaces.com/pl/uploads/goods/yGfygOR9vr2Be8y5A9N3xNKskJRqEaj6pOJomxpZ.png',
+    imageUrl : 'https://image.maudau.com.ua/webp/size/lg/products/f9/37/7c/f9377c27-cfe4-4126-9b27-abf8da47f0f9',
   },
   {
     id: 5,
     name: 'Drip monteblanco 2',
     price: 50,
-    imageUrl : 'https://foundation-images.fra1.cdn.digitaloceanspaces.com/pl/uploads/goods/kaHlxJL1iHroYKcti0hlIt33Q7YqqDL8DG13rMif.png',
+    imageUrl : 'https://image.maudau.com.ua/webp/size/lg/products/f9/37/7c/f9377c27-cfe4-4126-9b27-abf8da47f0f9',
   },
   {
     id: 6,

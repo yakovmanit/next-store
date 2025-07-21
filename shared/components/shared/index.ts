@@ -13,4 +13,5 @@ export { ProductImage } from './product-image';
 export { GroupVariants } from './group-variants';
 export { ChooseCoffeeForm } from './choose-coffee-form';
 export { ChooseProductForm } from './choose-product-form';
+export { IngredientItem } from './ingredient-item';
 export * from './modals';
