@@ -1,19 +1,20 @@
 "use client"
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {cn} from "@/shared/lib/utils";
 import {Title} from "@/shared/components/shared/title";
 import { Button } from '../ui';
 import {GroupVariants, ProductImage, IngredientItem} from "@/shared/components/shared";
 import {CoffeeSize, coffeeSizes, CoffeeType, coffeeTypes} from "@/shared/constants/coffee";
 import {useSet} from "react-use";
+import {Ingredient, ProductItem} from "@prisma/client";
 
 interface Props {
   imageUrl: string;
   name: string;
-  ingredients: any[];
-  items?: any[];
-  onClickAdd?: VoidFunction;
+  ingredients: Ingredient[];
+  items: ProductItem[];
+  onClickAddCart?: VoidFunction;
   className?: string;
 }
 
@@ -23,17 +24,46 @@ export const ChooseCoffeeForm: React.FC<Props> = (
     name,
     ingredients,
     items,
-    onClickAdd,
+    onClickAddCart,
     className,
   }
 ) => {
+  // console.log('items', items);
+
   const [size, setSize] = useState<CoffeeSize>(20);
   const [type, setType] = useState<CoffeeType>(1);
 
   const [selectedIngredients, {toggle: addIngredient}] = useSet(new Set<number>([]));
 
   const textDetails = 'lorem ipsum dolor sit amet consectetur adipisicing elit.';
-  const totalPrice = 199;
+
+  const filteredProductsByType = items.filter(item => item.productType === type);
+  const availableProductSizes = coffeeSizes.map(item => ({
+    name: item.name,
+    value: item.value,
+    disabled: !filteredProductsByType.some(product => Number(product.size) === Number(item.value)),
+  }));
+
+  useEffect(() => {
+    const isAvailableSize = availableProductSizes?.find(item => Number(item.value) === size && !item.disabled);
+    const firstAvailableSize = availableProductSizes?.find(item => !item.disabled);
+
+    if (!isAvailableSize && firstAvailableSize) {
+      setSize(Number(firstAvailableSize.value) as CoffeeSize);
+    }
+  }, [type]);
+
+  console.log({ items, filteredProductsByType, availableProductSizes });
+
+  const hangleClickAdd = () => {
+    onClickAddCart?.();
+
+    console.log({
+      size,
+      type,
+      ingredients: selectedIngredients,
+    });
+  }
 
   return (
     <div className={cn('flex flex-1', className)}>
@@ -45,7 +75,7 @@ export const ChooseCoffeeForm: React.FC<Props> = (
         <p className='text-grey-400'>{textDetails}</p>
 
         <GroupVariants
-          items={coffeeSizes}
+          items={availableProductSizes}
           value={String(size)}
           onClick={value => setSize(Number(value) as CoffeeSize)}
         />
@@ -72,6 +102,7 @@ export const ChooseCoffeeForm: React.FC<Props> = (
         </div>
 
         <Button
+          onClick={hangleClickAdd}
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
           Add to cart for {totalPrice} ₽
         </Button>
