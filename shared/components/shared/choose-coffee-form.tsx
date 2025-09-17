@@ -1,13 +1,14 @@
 "use client"
 
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {cn} from "@/shared/lib/utils";
 import {Title} from "@/shared/components/shared/title";
 import { Button } from '../ui';
 import {GroupVariants, ProductImage, IngredientItem} from "@/shared/components/shared";
-import {CoffeeSize, coffeeSizes, CoffeeType, coffeeTypes} from "@/shared/constants/coffee";
-import {useSet} from "react-use";
+import {CoffeeSize, CoffeeType, coffeeTypes} from "@/shared/constants/coffee";
 import {Ingredient, ProductItem} from "@prisma/client";
+import { useCoffeeOptions } from '@/shared/hooks';
+import {getCoffeeDetails} from "@/shared/lib";
 
 interface Props {
   imageUrl: string;
@@ -28,32 +29,9 @@ export const ChooseCoffeeForm: React.FC<Props> = (
     className,
   }
 ) => {
-  // console.log('items', items);
+  const { size, type, selectedIngredients, availableSizes, setSize, setType, addIngredient } = useCoffeeOptions(items);
 
-  const [size, setSize] = useState<CoffeeSize>(20);
-  const [type, setType] = useState<CoffeeType>(1);
-
-  const [selectedIngredients, {toggle: addIngredient}] = useSet(new Set<number>([]));
-
-  const textDetails = 'lorem ipsum dolor sit amet consectetur adipisicing elit.';
-
-  const filteredProductsByType = items.filter(item => item.productType === type);
-  const availableProductSizes = coffeeSizes.map(item => ({
-    name: item.name,
-    value: item.value,
-    disabled: !filteredProductsByType.some(product => Number(product.size) === Number(item.value)),
-  }));
-
-  useEffect(() => {
-    const isAvailableSize = availableProductSizes?.find(item => Number(item.value) === size && !item.disabled);
-    const firstAvailableSize = availableProductSizes?.find(item => !item.disabled);
-
-    if (!isAvailableSize && firstAvailableSize) {
-      setSize(Number(firstAvailableSize.value) as CoffeeSize);
-    }
-  }, [type]);
-
-  console.log({ items, filteredProductsByType, availableProductSizes });
+  const { totalPrice, textDetails } = getCoffeeDetails(type, size, items, ingredients, selectedIngredients);
 
   const hangleClickAdd = () => {
     onClickAddCart?.();
@@ -75,7 +53,7 @@ export const ChooseCoffeeForm: React.FC<Props> = (
         <p className='text-grey-400'>{textDetails}</p>
 
         <GroupVariants
-          items={availableProductSizes}
+          items={availableSizes}
           value={String(size)}
           onClick={value => setSize(Number(value) as CoffeeSize)}
         />
