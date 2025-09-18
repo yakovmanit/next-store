@@ -1,9 +1,9 @@
 import React from 'react';
 import {cn} from "@/shared/lib/utils";
-import {Container, SearchInput} from "@/shared/components/shared/";
+import {CartButton, Container, SearchInput} from "@/shared/components/shared/";
 import Link from "next/link";
 import {Button} from "@/shared/components/ui";
-import {ArrowRight, ShoppingCart, User} from "lucide-react";
+import {User} from "lucide-react";
 
 interface Props {
   className?: string;
@@ -34,17 +34,7 @@ export const Header: React.FC<Props> = ({ className }) => {
             Log in
           </Button>
 
-          <div>
-            <Button className="group relative">
-              <b>520 ₴</b>
-              <span className="h-full w-[1px] bg-white/30 mx-1"></span>
-              <div className="relative flex items-center gap-1">
-                <b className="group-hover:opacity-0 transition duration-300">3</b>
-                <ShoppingCart size={16} className="group-hover:opacity-0 transition duration-300" />
-                <ArrowRight size={20} className="absolute top-0 left-0 opacity-0 transition duration-300 translate-x-0 group-hover:opacity-100 group-hover:translate-x-2" />
-              </div>
-            </Button>
-          </div>
+          <CartButton />
         </div>
       </Container>
     </div>
