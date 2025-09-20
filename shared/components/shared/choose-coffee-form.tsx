@@ -82,7 +82,7 @@ export const ChooseCoffeeForm: React.FC<Props> = (
         <Button
           onClick={hangleClickAdd}
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
-          Add to cart for {totalPrice} ₽
+          Add to cart for {totalPrice} ₴
         </Button>
       </div>
     </div>

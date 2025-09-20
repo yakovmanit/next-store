@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import {
   Sheet,
@@ -11,6 +13,8 @@ import {
 import Link from "next/link";
 import { Button } from '../ui';
 import { ArrowRight } from 'lucide-react';
+import {CartDrawerItem} from "@/shared/components/shared/cart-drawer-item";
+import {getCartItemDetails} from "@/shared/lib";
 
 interface Props {
   className?: string;
@@ -28,6 +32,38 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({children, 
         </SheetHeader>
 
         {/* Items */}
+        <div className='-mx-6 mt-5 overflow-auto flex-1'>
+          <div className='mb-2'>
+            <CartDrawerItem
+              id={1}
+              imageUrl={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3BiJcJYemwOvf8pqscrulgbi_j9WicFTIgA&s'}
+              name={'Coffee'}
+              price={415}
+              quantity={1}
+              details={getCartItemDetails(2, 30, [{ name: 'Test drip coffee' }, { name: 'Test drip coffee 2' }])}
+            />
+          </div>
+          <div className='mb-2'>
+            <CartDrawerItem
+              id={1}
+              imageUrl={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3BiJcJYemwOvf8pqscrulgbi_j9WicFTIgA&s'}
+              name={'Coffee'}
+              price={415}
+              quantity={1}
+              details={getCartItemDetails(2, 30, [{ name: 'Test drip coffee' }, { name: 'Test drip coffee 2' }])}
+            />
+          </div>
+          <div className='mb-2'>
+            <CartDrawerItem
+              id={1}
+              imageUrl={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3BiJcJYemwOvf8pqscrulgbi_j9WicFTIgA&s'}
+              name={'Coffee'}
+              price={415}
+              quantity={1}
+              details={getCartItemDetails(2, 30, [{ name: 'Test drip coffee' }, { name: 'Test drip coffee 2' }])}
+            />
+          </div>
+        </div>
 
         <SheetFooter className="-mx-6 bg-white p-8">
           <div className="w-full">
