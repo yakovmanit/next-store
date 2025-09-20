@@ -1,9 +1,8 @@
 'use client'
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
@@ -15,54 +14,55 @@ import { Button } from '../ui';
 import { ArrowRight } from 'lucide-react';
 import {CartDrawerItem} from "@/shared/components/shared/cart-drawer-item";
 import {getCartItemDetails} from "@/shared/lib";
+import {useCartStore} from "@/shared/store/cart";
+import {CoffeeSize, CoffeeType} from "@/shared/constants/coffee";
 
 interface Props {
   className?: string;
 }
 
 export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({children, className }) => {
+  const totalAmount = useCartStore(state => state.totalAmount);
+  const fetchCartItems = useCartStore(state => state.fetchCartItems);
+  const items = useCartStore(state => state.items);
+
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
+
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#f4f1ee]">
         <SheetHeader>
           <SheetTitle>
-            <span className="font-bold">3</span> products
+            <span className="font-bold">{items.length}</span> products
           </SheetTitle>
         </SheetHeader>
 
         {/* Items */}
         <div className='-mx-6 mt-5 overflow-auto flex-1'>
-          <div className='mb-2'>
-            <CartDrawerItem
-              id={1}
-              imageUrl={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3BiJcJYemwOvf8pqscrulgbi_j9WicFTIgA&s'}
-              name={'Coffee'}
-              price={415}
-              quantity={1}
-              details={getCartItemDetails(2, 30, [{ name: 'Test drip coffee' }, { name: 'Test drip coffee 2' }])}
-            />
-          </div>
-          <div className='mb-2'>
-            <CartDrawerItem
-              id={1}
-              imageUrl={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3BiJcJYemwOvf8pqscrulgbi_j9WicFTIgA&s'}
-              name={'Coffee'}
-              price={415}
-              quantity={1}
-              details={getCartItemDetails(2, 30, [{ name: 'Test drip coffee' }, { name: 'Test drip coffee 2' }])}
-            />
-          </div>
-          <div className='mb-2'>
-            <CartDrawerItem
-              id={1}
-              imageUrl={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3BiJcJYemwOvf8pqscrulgbi_j9WicFTIgA&s'}
-              name={'Coffee'}
-              price={415}
-              quantity={1}
-              details={getCartItemDetails(2, 30, [{ name: 'Test drip coffee' }, { name: 'Test drip coffee 2' }])}
-            />
-          </div>
+          {
+            items.map(item => (
+              <div
+                key={item.id}
+                className='mb-2'
+              >
+                <CartDrawerItem
+                  id={item.id}
+                  imageUrl={item.imageUrl}
+                  name={item.name}
+                  price={item.price}
+                  quantity={item.quantity}
+                  details={
+                    item.coffeeSize && item.coffeeType
+                      ? getCartItemDetails(item.coffeeType as CoffeeType, item.coffeeSize as CoffeeSize, item.ingredients)
+                      : ''
+                  }
+                />
+              </div>
+            ))
+          }
         </div>
 
         <SheetFooter className="-mx-6 bg-white p-8">
@@ -73,7 +73,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({children, 
                 <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2" />
               </span>
 
-              <span className="font-bold text-lg">399 ₴</span>
+              <span className="font-bold text-lg">{totalAmount} ₴</span>
             </div>
 
             <Link href="/cart">
