@@ -38,16 +38,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     return NextResponse.json(updatedUserCart);
 
   } catch (err) {
-    console.error('Cart PATCH server arror', err);
-
-    return NextResponse.json(
-      {
-        message: 'Cart not updated'
-      },
-      {
-        status: 500
-      }
-    );
+    console.log('[CART_ITEM_PATCH] Server error', err);
+    return NextResponse.json({ message: 'Cart item not updated' }, { status: 500 });
   }
 }
 
@@ -83,6 +75,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     return NextResponse.json(updatedUserCart);
 
   } catch (err) {
-    console.log('Server error', err)
+    console.log('[CART_ITEM_DELETE] Server error', err);
+    return NextResponse.json({ message: 'Item not deleted' }, { status: 500 });
   }
 }
