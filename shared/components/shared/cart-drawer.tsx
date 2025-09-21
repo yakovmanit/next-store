@@ -24,11 +24,18 @@ interface Props {
 export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({children, className }) => {
   const totalAmount = useCartStore(state => state.totalAmount);
   const fetchCartItems = useCartStore(state => state.fetchCartItems);
+  const updateItemQuantity = useCartStore(state => state.updateItemQuantity);
   const items = useCartStore(state => state.items);
 
   useEffect(() => {
     fetchCartItems();
   }, []);
+
+  const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
+    const newQuantity = type === 'plus' ? quantity + 1 : quantity - 1;
+
+    updateItemQuantity(id, newQuantity);
+  }
 
   return (
     <Sheet>
@@ -59,6 +66,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({children, 
                       ? getCartItemDetails(item.coffeeType as CoffeeType, item.coffeeSize as CoffeeSize, item.ingredients)
                       : ''
                   }
+                  onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
                 />
               </div>
             ))
