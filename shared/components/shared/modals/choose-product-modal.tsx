@@ -9,7 +9,7 @@ import {ChooseProductForm} from "@/shared/components/shared/choose-product-form"
 import {VisuallyHidden} from "@radix-ui/react-visually-hidden";
 import {ProductWithRelations} from "@/@types/prisma";
 import {ChooseCoffeeForm} from "@/shared/components/shared/choose-coffee-form";
-import {coffeeSizes} from "@/shared/constants/coffee";
+import {useCartStore} from "@/shared/store/cart";
 
 interface Props {
   product: ProductWithRelations;
@@ -18,7 +18,23 @@ interface Props {
 
 export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
   const router = useRouter();
-  const isCoffeeForm = Boolean(product.items[0].productType);
+  const firstItem = product.items[0];
+  const isCoffeeForm = Boolean(firstItem.productType);
+
+  const addCartItem = useCartStore(store => store.addCartItem);
+
+  const onAddProduct = () => {
+    addCartItem({
+      productItemId: firstItem.id,
+    });
+  }
+
+  const onAddCoffee = (productItemId: number, ingredients: number[]) => {
+    addCartItem({
+      productItemId,
+      ingredients,
+    });
+  }
 
   return (
     <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
@@ -35,11 +51,14 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
               name={product.name}
               ingredients={product.ingredients}
               items={product.items}
+              onSubmit={onAddCoffee}
             />
           ) : (
             <ChooseProductForm
               imageUrl={product.imageUrl}
               name={product.name}
+              price={firstItem.price}
+              onSubmit={onAddProduct}
             />
           )
         }

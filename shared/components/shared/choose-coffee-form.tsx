@@ -15,7 +15,7 @@ interface Props {
   name: string;
   ingredients: Ingredient[];
   items: ProductItem[];
-  onClickAddCart?: VoidFunction;
+  onSubmit: (itemId: number, ingredients: number[]) => void;
   className?: string;
 }
 
@@ -25,22 +25,18 @@ export const ChooseCoffeeForm: React.FC<Props> = (
     name,
     ingredients,
     items,
-    onClickAddCart,
+    onSubmit,
     className,
   }
 ) => {
-  const { size, type, selectedIngredients, availableSizes, setSize, setType, addIngredient } = useCoffeeOptions(items);
+  const { size, type, selectedIngredients, availableSizes, currentItemId, setSize, setType, addIngredient } = useCoffeeOptions(items);
 
   const { totalPrice, textDetails } = getCoffeeDetails(type, size, items, ingredients, selectedIngredients);
 
   const hangleClickAdd = () => {
-    onClickAddCart?.();
-
-    console.log({
-      size,
-      type,
-      ingredients: selectedIngredients,
-    });
+    if (currentItemId) {
+      onSubmit(currentItemId, Array.from(selectedIngredients));
+    }
   }
 
   return (

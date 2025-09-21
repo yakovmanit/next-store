@@ -10,6 +10,7 @@ interface ReturnProps {
   type: CoffeeType;
   selectedIngredients: Set<number>;
   availableSizes: Variant[];
+  currentItemId?: number,
   setSize: (size: CoffeeSize) => void;
   setType: (size: CoffeeType) => void;
   addIngredient: (id: number) => void;
@@ -21,6 +22,8 @@ export const useCoffeeOptions = (items: ProductItem[]): ReturnProps => {
   const [selectedIngredients, {toggle: addIngredient}] = useSet(new Set<number>([]));
 
   const availableSizes = getAvailableCoffeeSizes(type, items);
+
+  const currentItemId = items.find((item) => item.productType === type && item.size === size)?.id;
 
   useEffect(() => {
     const isAvailableSize = availableSizes?.find(item => Number(item.value) === size && !item.disabled);
@@ -36,6 +39,7 @@ export const useCoffeeOptions = (items: ProductItem[]): ReturnProps => {
     type,
     selectedIngredients,
     availableSizes,
+    currentItemId,
     setSize,
     setType,
     addIngredient,

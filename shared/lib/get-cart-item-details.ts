@@ -10,7 +10,7 @@ export const getCartItemDetails = (
 
   if (coffeeSize && coffeeType) {
     const typeName = mapCoffeeType[coffeeType];
-    details.push(`${typeName} ${coffeeSize} см`);
+    details.push(`${typeName} ${coffeeSize} items`);
   }
 
   if (ingredients) {
