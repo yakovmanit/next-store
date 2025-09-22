@@ -17,6 +17,7 @@ interface Props {
   items: ProductItem[];
   onSubmit: (itemId: number, ingredients: number[]) => void;
   className?: string;
+  loading: boolean;
 }
 
 export const ChooseCoffeeForm: React.FC<Props> = (
@@ -27,6 +28,7 @@ export const ChooseCoffeeForm: React.FC<Props> = (
     items,
     onSubmit,
     className,
+    loading,
   }
 ) => {
   const { size, type, selectedIngredients, availableSizes, currentItemId, setSize, setType, addIngredient } = useCoffeeOptions(items);
@@ -76,6 +78,7 @@ export const ChooseCoffeeForm: React.FC<Props> = (
         </div>
 
         <Button
+          loading={loading}
           onClick={hangleClickAdd}
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
           Add to cart for {totalPrice} ₴
