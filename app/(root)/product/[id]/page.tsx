@@ -5,7 +5,9 @@ import {Container, Title} from "@/shared/components/shared";
 import {ProductImage} from "@/shared/components/shared/product-image";
 import {GroupVariants} from "@/shared/components/shared/group-variants";
 
-export default async function ProductPage({ params: { id } }: { params: { id: string } }) {
+export default async function ProductModalPage(props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params;
+
   const product = await prisma.product.findFirst({
     where: {
       id: Number(id),
