@@ -38,6 +38,16 @@ export const findCoffee = async (params: GetSearchParams) => {
                 },
               }
             : undefined,
+          items: {
+            some: {
+              size: {
+                in: sizes,
+              },
+              productType: {
+                in: coffeeTypes,
+              }
+            },
+          },
         },
         include: {
           ingredients: true,
