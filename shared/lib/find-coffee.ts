@@ -45,13 +45,27 @@ export const findCoffee = async (params: GetSearchParams) => {
               },
               productType: {
                 in: coffeeTypes,
-              }
+              },
+              price: {
+                gte: minPrice,
+                lte: maxPrice,
+              },
             },
           },
         },
         include: {
           ingredients: true,
-          items: true,
+          items: {
+            where: {
+              price: {
+                gte: minPrice,
+                lte: maxPrice,
+              },
+            },
+            orderBy: {
+              price: 'asc',
+            }
+          },
         }
       },
     },
