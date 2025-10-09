@@ -62,37 +62,47 @@ export async function POST(req: NextRequest) {
       where: {
         cartId: userCart.id,
         productItemId: data.productItemId,
-        ingredients: {
-          every: {
-            id: {
-              in: data.ingredients,
-            },
-          },
-        },
+      },
+      include: {
+        ingredients: true,
       },
     });
 
-    // If product found
-    if (findCartItem) {
+    // Check the same ingredients
+    const cartIngredientIds = findCartItem?.ingredients.map(ing => ing.id).sort() || [];
+    const requestIngredientIds = (data.ingredients || []).sort();
+
+    const isSameIngredients =
+      findCartItem &&
+      cartIngredientIds.length === requestIngredientIds.length &&
+      cartIngredientIds.every((id, index) => id === requestIngredientIds[index]);
+
+    if (findCartItem && isSameIngredients) {
+      // Add +1 to an existing product quantity
       await prisma.cartItem.update({
         where: {
           id: findCartItem.id,
         },
         data: {
           quantity: {
-            increment: findCartItem.quantity + 1,
+            increment: 1,
           },
         },
       });
     } else {
-      // If product not found
+      // Create new product with different ingredients
+      const createData: any = {
+        cartId: userCart.id,
+        productItemId: data.productItemId,
+        quantity: 1,
+      };
+
+      if (data.ingredients && data.ingredients.length > 0) {
+        createData.ingredients = { connect: data.ingredients.map(id => ({ id })) };
+      }
+
       await prisma.cartItem.create({
-        data: {
-          cartId: userCart.id,
-          productItemId: data.productItemId,
-          quantity: 1,
-          ingredients: { connect: data.ingredients?.map(id => ({ id })) },
-        },
+        data: createData,
       });
     }
 
