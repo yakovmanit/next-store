@@ -16,6 +16,7 @@ import {CartDrawerItem} from "@/shared/components/shared/cart-drawer-item";
 import {getCartItemDetails} from "@/shared/lib";
 import {useCartStore} from "@/shared/store/cart";
 import {CoffeeSize, CoffeeType} from "@/shared/constants/coffee";
+import {Title} from "@/shared/components/shared";
 
 interface Props {
   className?: string;
@@ -42,63 +43,78 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({children, 
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#f4f1ee]">
-        <SheetHeader>
-          <SheetTitle>
-            <span className="font-bold">{items.length}</span> products
-          </SheetTitle>
-        </SheetHeader>
+        {
+          totalAmount > 0 && (
+            <SheetHeader>
+              <SheetTitle>
+                <span className="font-bold">{items.length}</span> products
+              </SheetTitle>
+            </SheetHeader>
+          )
+        }
+
+        {
+          !totalAmount && (
+            <Title size="md" text="Cart is empty :(" className="flex flex-col items-center justify-center w-72 mx-auto h-full" />
+          )
+        }
 
         {/* Items */}
-        <div className='-mx-6 mt-5 overflow-auto flex-1'>
-          {
-            items.map(item => (
-              <div
-                key={item.id}
-                className='mb-2'
-              >
-                <CartDrawerItem
-                  id={item.id}
-                  imageUrl={item.imageUrl}
-                  name={item.name}
-                  price={item.price}
-                  quantity={item.quantity}
-                  details={
-                    item.coffeeSize && item.coffeeType
-                      ? getCartItemDetails(item.coffeeType as CoffeeType, item.coffeeSize as CoffeeSize, item.ingredients)
-                      : ''
-                  }
-                  disabled={item.disabled}
-                  onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
-                  onClickRemove={() => removeCartItem(item.id)}
-                />
+        {
+          totalAmount > 0 && (
+            <>
+              <div className='-mx-6 mt-5 overflow-auto flex-1'>
+                {
+                  items.map(item => (
+                    <div
+                      key={item.id}
+                      className='mb-2'
+                    >
+                      <CartDrawerItem
+                        id={item.id}
+                        imageUrl={item.imageUrl}
+                        name={item.name}
+                        price={item.price}
+                        quantity={item.quantity}
+                        details={
+                          item.coffeeSize && item.coffeeType
+                            ? getCartItemDetails(item.coffeeType as CoffeeType, item.coffeeSize as CoffeeSize, item.ingredients)
+                            : ''
+                        }
+                        disabled={item.disabled}
+                        onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
+                        onClickRemove={() => removeCartItem(item.id)}
+                      />
+                    </div>
+                  ))
+                }
               </div>
-            ))
-          }
-        </div>
 
-        <SheetFooter className="-mx-6 bg-white p-8">
-          <div className="w-full">
-            <div className="flex mb-4">
+              <SheetFooter className="-mx-6 bg-white p-8">
+                <div className="w-full">
+                  <div className="flex mb-4">
               <span className="flex flex-1 text-lg text-neutral-500">
                 Total amount:
                 <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2" />
               </span>
 
-              <span className="font-bold text-lg">{totalAmount} ₴</span>
-            </div>
+                    <span className="font-bold text-lg">{totalAmount} ₴</span>
+                  </div>
 
-            <Link href="/cart">
-              <Button
-                type="submit"
-                className="w-full h-12 text-base"
-              >
-                Submit
-                <ArrowRight className="w-5 ml-2" />
-              </Button>
-            </Link>
-          </div>
-        </SheetFooter>
-
+                  <Link href="/cart">
+                    <Button
+                      type="submit"
+                      className="w-full h-12 text-base"
+                    >
+                      Submit
+                      <ArrowRight className="w-5 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </SheetFooter>
+            </>
+          )
+        }
       </SheetContent>
     </Sheet>
   );
