@@ -7,11 +7,13 @@ import {User} from "lucide-react";
 
 interface Props {
   className?: string;
+  hasSearch?: boolean;
+  hasCart?: boolean;
 }
 
-export const Header: React.FC<Props> = ({ className }) => {
+export const Header: React.FC<Props> = ({ className, hasSearch = true, hasCart = true }) => {
   return (
-    <div className={cn('border border-b', className)}>
+    <div className={cn('border-b', className)}>
       <Container className="flex items-center justify-between py-8">
 
         {/* Left part */}
@@ -23,9 +25,13 @@ export const Header: React.FC<Props> = ({ className }) => {
         </div>
 
         {/* Search */}
-        <div className="mx-10 flex-1">
-          <SearchInput />
-        </div>
+        {
+          hasSearch && (
+            <div className="mx-10 flex-1">
+              <SearchInput />
+            </div>
+          )
+        }
 
         {/* Right part */}
         <div className="flex items-center gap-3">
@@ -34,7 +40,11 @@ export const Header: React.FC<Props> = ({ className }) => {
             Log in
           </Button>
 
-          <CartButton />
+          {
+            hasCart && (
+              <CartButton />
+            )
+          }
         </div>
       </Container>
     </div>
