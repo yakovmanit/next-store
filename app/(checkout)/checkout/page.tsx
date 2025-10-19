@@ -1,9 +1,34 @@
+'use client'
+
 import React from 'react';
-import {CheckoutItemDetails, Container, Title, WhiteBlock} from "@/shared/components/shared";
-import {Button, Input, Textarea} from "@/shared/components/ui";
-import {ArrowRight} from "lucide-react";
+import {
+  CheckoutItem,
+  CheckoutSidebar,
+  Container,
+  Title,
+  WhiteBlock
+} from "@/shared/components/shared";
+import {Input, Textarea} from "@/shared/components/ui";
+import {useCart} from "@/shared/hooks";
+import {getCartItemDetails} from "@/shared/lib";
+import {CoffeeSize, CoffeeType} from "@/shared/constants/coffee";
+
+
 
 export default function CheckoutPage() {
+  const {
+    totalAmount,
+    updateItemQuantity,
+    items,
+    removeCartItem
+  } = useCart();
+
+  const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
+    const newQuantity = type === 'plus' ? quantity + 1 : quantity - 1;
+
+    updateItemQuantity(id, newQuantity);
+  }
+
   return (
     <Container className="mt-10">
       <Title text="Checkout" className="font-extrabold mb-8 text-[36px]" />
@@ -12,7 +37,30 @@ export default function CheckoutPage() {
         {/* Left part */}
         <div className="flex flex-col gap-10 flex-1 mb-20">
           <WhiteBlock title="1. Cart">
-            Cart
+            <div className="flex flex-col gap-4">
+              {
+                items.map((item) => (
+                  <CheckoutItem
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    price={item.price}
+                    quantity={item.quantity}
+                    imageUrl={item.imageUrl}
+                    details={
+                      getCartItemDetails(
+                        item.ingredients,
+                        item.coffeeType as CoffeeType,
+                        item.coffeeSize as CoffeeSize,
+                      )
+                    }
+                    disabled={item.disabled}
+                    onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
+                    onClickRemove={() => removeCartItem(item.id)}
+                  />
+                ))
+              }
+            </div>
           </WhiteBlock>
 
           <WhiteBlock title="2. Your personal data">
@@ -37,28 +85,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* Right part */}
-        <div className="w-85">
-          <WhiteBlock className='p-6 sticky top-4'>
-            <div className="flex flex-col gap-1">
-              <span className="text-xl">Total amount:</span>
-              <span className="h-11 text-[34px] font-extrabold">1234</span>
-            </div>
-
-            <CheckoutItemDetails title="Price for products:" value={'1000'} />
-
-            <CheckoutItemDetails title="Taxes:" value={'200'} />
-
-            <CheckoutItemDetails title="Delivery:" value={'34'} />
-
-            <Button
-              type="submit"
-              className="w-full h-14 rounded-2xl mt-6 text-base font-bold"
-            >
-              Buy
-              <ArrowRight className="w-5 ml-2" />
-            </Button>
-          </WhiteBlock>
-        </div>
+        <CheckoutSidebar totalAmount={totalAmount}/>
       </div>
     </Container>
   );
