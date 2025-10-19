@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   Sheet,
   SheetContent,
@@ -14,24 +14,17 @@ import { Button } from '../ui';
 import { ArrowRight } from 'lucide-react';
 import {CartDrawerItem} from "@/shared/components/shared/cart-drawer-item";
 import {getCartItemDetails} from "@/shared/lib";
-import {useCartStore} from "@/shared/store/cart";
 import {CoffeeSize, CoffeeType} from "@/shared/constants/coffee";
 import {Title} from "@/shared/components/shared";
+import {useCart} from "@/shared/hooks";
 
-interface Props {
-  className?: string;
-}
-
-export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({children, className }) => {
-  const totalAmount = useCartStore(state => state.totalAmount);
-  const fetchCartItems = useCartStore(state => state.fetchCartItems);
-  const updateItemQuantity = useCartStore(state => state.updateItemQuantity);
-  const items = useCartStore(state => state.items);
-  const removeCartItem = useCartStore(state => state.removeCartItem);
-
-  useEffect(() => {
-    fetchCartItems();
-  }, []);
+export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const {
+    totalAmount,
+    updateItemQuantity,
+    items,
+    removeCartItem
+  } = useCart();
 
   const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
     const newQuantity = type === 'plus' ? quantity + 1 : quantity - 1;
@@ -77,10 +70,12 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({children, 
                         price={item.price}
                         quantity={item.quantity}
                         details={
-                          item.coffeeSize && item.coffeeType
-                            ? getCartItemDetails(item.coffeeType as CoffeeType, item.coffeeSize as CoffeeSize, item.ingredients)
-                            : ''
-                        }
+                          getCartItemDetails(
+                              item.ingredients,
+                              item.coffeeType as CoffeeType,
+                              item.coffeeSize as CoffeeSize,
+                            )
+                          }
                         disabled={item.disabled}
                         onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
                         onClickRemove={() => removeCartItem(item.id)}
@@ -101,7 +96,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({children, 
                     <span className="font-bold text-lg">{totalAmount} ₴</span>
                   </div>
 
-                  <Link href="/cart">
+                  <Link href="/checkout">
                     <Button
                       type="submit"
                       className="w-full h-12 text-base"
