@@ -2,8 +2,8 @@ import React from 'react';
 import {cn} from "@/shared/lib/utils";
 
 interface Props {
-  title?: string;
-  value?: string;
+  title?: string | React.ReactNode;
+  value?: string | React.ReactNode;
   className?: string;
 }
 
