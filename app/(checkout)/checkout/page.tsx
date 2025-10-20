@@ -25,7 +25,8 @@ export default function CheckoutPage() {
     totalAmount,
     updateItemQuantity,
     items,
-    removeCartItem
+    removeCartItem,
+    loading,
   } = useCart();
 
   const form = useForm<CheckoutFormValues>({
@@ -64,15 +65,19 @@ export default function CheckoutPage() {
                 items={items}
                 onClickCountButton={onClickCountButton}
                 removeCartItem={removeCartItem}
+                loading={loading}
               />
 
-              <CheckoutPersonalForm />
+              <CheckoutPersonalForm className={loading ? 'opacity-40 pointer-events-none': ''} />
 
-              <CheckoutAddressForm />
+              <CheckoutAddressForm className={loading ? 'opacity-40 pointer-events-none': ''} />
             </div>
 
             {/* Right part */}
-            <CheckoutSidebar totalAmount={totalAmount}/>
+            <CheckoutSidebar
+              totalAmount={totalAmount}
+              loading={loading}
+            />
           </div>
         </form>
       </FormProvider>
