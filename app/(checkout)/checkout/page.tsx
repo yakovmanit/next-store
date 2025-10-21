@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, {useState} from 'react';
 import {
   CheckoutSidebar,
   Container,
@@ -19,8 +19,12 @@ import {
   CheckoutFormValues,
 } from "@/shared/constants";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {createOrder} from "@/app/actions";
+import toast from "react-hot-toast";
 
 export default function CheckoutPage() {
+  const [submitting, setSubmitting] = useState(false);
+
   const {
     totalAmount,
     updateItemQuantity,
@@ -41,8 +45,28 @@ export default function CheckoutPage() {
     },
   });
 
-  const onSubmit = (data: CheckoutFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: CheckoutFormValues) => {
+    try {
+      setSubmitting(true);
+
+      const url = await createOrder(data);
+
+      toast.success('Order creation successful', {
+        icon: '✅',
+      });
+
+      if (url) {
+        location.href = url;
+      }
+
+    } catch (error) {
+      console.warn(error);
+      setSubmitting(false);
+
+      toast.error('Order creation failed', {
+        icon: '❌',
+      });
+    }
   }
 
   const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
@@ -76,7 +100,7 @@ export default function CheckoutPage() {
             {/* Right part */}
             <CheckoutSidebar
               totalAmount={totalAmount}
-              loading={loading}
+              loading={loading || submitting}
             />
           </div>
         </form>
