@@ -4,7 +4,7 @@ import {CheckoutFormValues} from "@/shared/constants";
 import {prisma} from "@/prisma/prisma-client";
 import {OrderStatus} from "@prisma/client";
 import {cookies} from "next/headers";
-import { sendEmail } from "@/shared/lib";
+import {createPayment, sendEmail} from "@/shared/lib";
 import {PayOrderTemplate} from "@/shared/components/shared";
 
 export async function createOrder(data: CheckoutFormValues) {
@@ -73,17 +73,31 @@ export async function createOrder(data: CheckoutFormValues) {
       },
     });
 
-    // TODO: create payment url
+    const monoPayment = await createPayment(
+      order.totalAmount,
+      order.id,
+    );
+
+    await prisma.order.update({
+      where: {
+        id: order.id,
+      },
+      data: {
+        paymentId: monoPayment.invoiceId,
+      },
+    })
 
     await sendEmail(
       data.email,
-      'Next Pizza / Оплатите заказ #' + order.id,
+      'Next Pizza / Pay for order #' + order.id,
       PayOrderTemplate({
         orderId: order.id,
         totalAmount: order.totalAmount,
-        paymentUrl: 'https://resend.com/onboarding',
+        paymentUrl: monoPayment.pageUrl,
       }) as React.ReactNode,
     );
+
+    return monoPayment.pageUrl;
 
   } catch(error) {
     console.log('[CreateOrder] Server error', error);
