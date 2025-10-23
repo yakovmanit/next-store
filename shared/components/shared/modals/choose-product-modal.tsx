@@ -2,13 +2,10 @@
 
 import React from 'react';
 import {Dialog} from "@/shared/components/ui";
-import {DialogContent, DialogTitle} from "@/shared/components/ui/dialog";
+import {DialogContent} from "@/shared/components/ui/dialog";
 import {cn} from "@/shared/lib/utils";
 import {useRouter} from "next/navigation";
-import {VisuallyHidden} from "@radix-ui/react-visually-hidden";
 import {ProductWithRelations} from "@/@types/prisma";
-import {useCartStore} from "@/shared/store/cart";
-import toast from "react-hot-toast";
 import {ProductForm} from "@/shared/components/shared";
 
 interface Props {
@@ -28,10 +25,6 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
         )}>
 
         <ProductForm product={product} onSubmit={() => router.back()} />
-
-        <VisuallyHidden>
-          <DialogTitle />
-        </VisuallyHidden>
       </DialogContent>
     </Dialog>
   );
