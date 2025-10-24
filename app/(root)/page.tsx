@@ -1,11 +1,9 @@
-import {Container, TopBar, Title, Filters} from "@/shared/components/shared";
-import {ProductsGroupList} from "@/shared/components/shared/products-group-list";
+import {Container, ProductsList, Title} from "@/shared/components/shared";
 import {Suspense} from "react";
-import {findCoffee, GetSearchParams} from "@/shared/lib/find-coffee";
+import {GetSearchParams} from "@/shared/lib/find-coffee";
 
 export default async function Home({ searchParams }: { searchParams: Promise<GetSearchParams> }) {
   const params = await searchParams;
-  const categories = await findCoffee(params);
 
   return (
     <>
@@ -13,38 +11,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Get
         <Title size={"lg"} text={'All products'} className="font-semibold" />
       </Container>
 
-      <TopBar categories={categories.filter(category => category.products.length > 0)} />
-
-      <Container className="mt-10 pb-14">
-        <div className="flex gap-15">
-
-          {/* Filters */}
-          <div className="w-[250px]">
-            <Suspense>
-              <Filters />
-            </Suspense>
-          </div>
-
-          {/* Products list */}
-          <div className="flex-1">
-            <div className="flex flex-col gap-16 mb-20">
-              {
-                categories.map((category) => (
-                  category.products.length > 0 && (
-                    <ProductsGroupList
-                      key={category.id}
-                      categoryId={category.id}
-                      title={category.name}
-                      items={category.products}
-                    />
-                  )
-                ))
-              }
-            </div>
-          </div>
-
-        </div>
-      </Container>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProductsList params={params} />
+      </Suspense>
     </>
   );
 }

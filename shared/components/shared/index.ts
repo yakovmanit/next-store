@@ -29,6 +29,7 @@ export { Providers } from './providers';
 export { ProfileButton } from './profile-button';
 export { InfoBlock } from './info-block';
 export { ProfileForm } from './profile-form';
+export { ProductsList } from './products-list';
 export * from './modals';
 export * from './form';
 export * from './checkout';
