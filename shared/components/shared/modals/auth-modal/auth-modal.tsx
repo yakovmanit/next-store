@@ -35,7 +35,7 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
 
           <hr/>
 
-          <div className="flerx gap-2">
+          <div className="flex mt-2 gap-2">
             <Button
               variant="secondary"
               onClick={() =>
