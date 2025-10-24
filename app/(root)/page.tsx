@@ -3,8 +3,9 @@ import {ProductsGroupList} from "@/shared/components/shared/products-group-list"
 import {Suspense} from "react";
 import {findCoffee, GetSearchParams} from "@/shared/lib/find-coffee";
 
-export default async function Home({ searchParams }: { searchParams: GetSearchParams }) {
-  const categories = await findCoffee(searchParams);
+export default async function Home({ searchParams }: { searchParams: Promise<GetSearchParams> }) {
+  const params = await searchParams;
+  const categories = await findCoffee(params);
 
   return (
     <>
