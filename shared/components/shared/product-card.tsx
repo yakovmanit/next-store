@@ -33,10 +33,13 @@ export const ProductCard: React.FC<Props> = ({ id, name, price, imageUrl, classN
           <b>{price} ₴</b>
         </span>
 
-        <Button variant="secondary" className="text-base font-bold">
-          <Plus size={20} className="mr-1" />
-          Add to cart
-        </Button>
+          <Link href={`/product/${id}`}>
+            <Button variant="secondary" className="text-base font-bold">
+              <Plus size={20} className="mr-1" />
+              Add to cart
+            </Button>
+          </Link>
+
       </div>
 
     </div>
