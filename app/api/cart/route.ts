@@ -42,6 +42,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(userCart)
   } catch (err) {
     console.log('[CART_GET] Server error', err);
+    return NextResponse.json({ message: 'Failed to get cart' }, { status: 500 });
   }
 
 }
