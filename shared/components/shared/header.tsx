@@ -4,6 +4,8 @@ import React, {useState} from 'react';
 import {cn} from "@/shared/lib/utils";
 import {AuthModal, CartButton, Container, ProfileButton, SearchInput} from "@/shared/components/shared/";
 import Link from "next/link";
+import {useRouter, useSearchParams} from "next/navigation";
+import toast from "react-hot-toast";
 
 interface Props {
   className?: string;
@@ -12,7 +14,31 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ className, hasSearch = true, hasCart = true }) => {
-  const [openAuthModal, setOpenAuthModal] = useState(true);
+  const router = useRouter();
+  const [openAuthModal, setOpenAuthModal] = React.useState(false);
+
+  const searchParams = useSearchParams();
+
+  React.useEffect(() => {
+    let toastMessage = '';
+
+    if (searchParams.has('paid')) {
+      toastMessage = 'Order paid successfully!';
+    }
+
+    if (searchParams.has('verified')) {
+      toastMessage = 'Email varified successfully!';
+    }
+
+    if (toastMessage) {
+      setTimeout(() => {
+        router.replace('/');
+        toast.success(toastMessage, {
+          duration: 3000,
+        });
+      }, 1000);
+    }
+  }, []);
 
   return (
     <div className={cn('border-b', className)}>

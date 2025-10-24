@@ -205,10 +205,12 @@ async function up() {
 async function down() {
   await prisma.cartItem.deleteMany({});
   await prisma.cart.deleteMany({});
+  await prisma.order.deleteMany({});
   await prisma.productItem.deleteMany({});
   await prisma.product.deleteMany({});
   await prisma.ingredient.deleteMany({});
   await prisma.category.deleteMany({});
+  await prisma.verificationCode.deleteMany({});
   await prisma.user.deleteMany({});
 }
 
