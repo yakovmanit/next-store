@@ -40,7 +40,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
           totalAmount > 0 && (
             <SheetHeader>
               <SheetTitle>
-                <span className="font-bold">{items.length}</span> products
+                <span className="font-bold">{items?.length}</span> products
               </SheetTitle>
             </SheetHeader>
           )

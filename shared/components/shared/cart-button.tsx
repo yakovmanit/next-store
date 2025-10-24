@@ -25,7 +25,7 @@ export const CartButton: React.FC<Props> = ({ className }) => {
         <b>{totalAmount} ₴</b>
         <span className="h-full w-[1px] bg-white/30 mx-1"></span>
         <div className="relative flex items-center gap-1">
-          <b className="group-hover:opacity-0 transition duration-300">{items.length}</b>
+          <b className="group-hover:opacity-0 transition duration-300">{items?.length}</b>
           <ShoppingCart size={16} className="group-hover:opacity-0 transition duration-300" />
           <ArrowRight size={20} className="absolute top-0 left-0 opacity-0 transition duration-300 translate-x-0 group-hover:opacity-100 group-hover:translate-x-2" />
         </div>
